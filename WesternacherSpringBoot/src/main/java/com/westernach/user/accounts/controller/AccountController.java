@@ -1,8 +1,11 @@
 package com.westernach.user.accounts.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +37,10 @@ public class AccountController {
 	}
 
 	@PostMapping("/saveAccount")
-	public String saveAccount(@ModelAttribute("account") Account account) {
+	public String saveAccount(@ModelAttribute("account") @Valid Account account, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "newAccount";
+		}
 		accountService.saveAccount(account);
 		return "redirect:/";
 	}
